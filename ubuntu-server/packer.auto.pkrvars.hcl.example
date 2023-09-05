@@ -1,0 +1,7 @@
+az_region = "centralus"
+az_resource_group = "example-group" # Must already exist
+az_image_gallery = "reverse_image_search"   # Must already exist
+az_subscription_id = "c9e7cee3-35fd-4fa3-a5b7-ab7e199b7480"
+department = "PlatformEng"
+owner = "image.engineer"
+prefix = "hashicafe"
