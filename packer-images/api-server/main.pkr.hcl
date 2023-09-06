@@ -1,6 +1,6 @@
 
 
-source "azure-arm" "training_server" {
+source "azure-arm" "api_server" {
   azure_tags = {
     type = "training_server"
     task = "Image deployment"
@@ -21,7 +21,7 @@ source "azure-arm" "training_server" {
 }
 
 build {
-  sources = ["source.azure-arm.training_server"]
+  sources = ["source.azure-arm.api_server"]
 
   provisioner "shell" {
     execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
@@ -36,11 +36,12 @@ build {
                       "export PATH",
                       "pip3 install tensorflow==2.13.* -y",
                       "python3 -c 'import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))'",
-                      "pip3 install -U prefect supervisor",
-                      "export PATH='$HOME/.local/bin:$PATH'"
-                      "prefect cloud login -k pnu_oJal2aQeZ2d6GTkHpgTs47Sd7MxHXq0FNNn2",
-                      "supervisord -c ./supervisord.conf",
-                      "echo '@reboot root supervisord -c $HOME/supervisord.conf -l $HOME supervisord.log -u root' >> /etc/crontab",
+                      "apt install docker.io",
+                      "apt install docker-compose",
+                      "groupadd docker",
+                      "usermod -aG docker $USER",
+                      "newgrp docker",
+                      "docker run hello-world",
                     ]
   }
 

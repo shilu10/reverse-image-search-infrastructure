@@ -30,9 +30,11 @@ build {
 
   provisioner "shell" {
     execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    inline          = ["apt-get update", 
+    inline          = ["sudo su",
+                      "apt-get update", 
                       "apt-get upgrade -y", 
                       "apt-get install software-properties-common -y",
+                      "apt-add-repository universe",
                       "apt install python3.9 -y", 
                       "python3 --version",
                       "apt install python3-pip -y",
