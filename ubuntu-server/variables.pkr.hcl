@@ -8,31 +8,33 @@ variable "az_resource_group" {
   type        = string
 }
 
-variable "az_image_gallery" {
-  description = "An existing Azure Compute Gallery (FKA Shared Image Gallery). The image definition must also exist."
-  type        = string
-}
-
 variable "az_subscription_id" {
   description = "Your Azure Subscription ID (required for the shared_image_gallery_destination block)."
   type        = string
   sensitive   = true
 }
 
-variable "department" {
-  description = "A value for the \"dept\" tag."
-  type        = string
-  default     = "PlatformEng"
+variable 'az_client_id' {
+  type = string 
 }
 
-variable "owner" {
-  description = "A value for the \"owner\" tag."
-  type        = string
-  default     = "image.engineer"
+variable 'az_client_secret' {
+  type = string 
 }
 
-variable "prefix" {
-  description = "This prefix will be included in the name of most resources."
-  type        = string
-  default     = "hashicafe"
+variable 'az_tenant_id' {
+  type = string
+}
+
+variable 'location' {
+  type = string 
+}
+
+variable 'packer_image_name' { 
+  type = string 
+}
+
+variable 'vm_size' {
+   type = string 
+   default = "Standard_Bs_1"
 }
