@@ -24,20 +24,21 @@ build {
   sources = ["source.azure-arm.training_server"]
 
   provisioner "shell" {
+    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
     inline          = ["apt-get update", 
                       "apt-get upgrade -y", 
                       "apt-get install software-properties-common -y",
-                      "apt-get install python3-dateutil -y",
-                      "apt install python3-pip -y",
+                      "apt-get install python3.9 -y",
+                      "apt-get install python3-pip -y",
                       "ln -s /usr/bin/python3 /usr/bin/python",
-                      'PATH="$HOME/.local/bin:$PATH"',
+                      "PATH='$HOME/.local/bin:$PATH',
                       "export PATH",
                       "pip3 install tensorflow==2.13.* -y",
-                      'python3 -c "import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"'',
+                      "python3 -c 'import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))'",
                       "pip3 install -U prefect supervisor -y",
-                      'prefect cloud login --key env("PREFECT_CLOUD_ACCESS_KEY")',
+                      "prefect cloud login -k pnu_oJal2aQeZ2d6GTkHpgTs47Sd7MxHXq0FNNn2",
                       "supervisord -c ./supervisord.conf",
-                      'echo "@reboot root supervisord -c $HOME/supervisord.conf -l $HOME supervisord.log -u root" >> /etc/crontab',
+                      "echo '@reboot root supervisord -c $HOME/supervisord.conf -l $HOME supervisord.log -u root' >> /etc/crontab",
                     ]
   }
 
