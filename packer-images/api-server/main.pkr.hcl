@@ -1,6 +1,18 @@
+packer {
+  required_plugins {
+    azure = {
+      source  = "github.com/hashicorp/azure"
+      version = "~> 1"
+    }
+    ansible = {
+      source  = "github.com/hashicorp/ansible"
+      version = "~> 1"
+    }
+  }
+}
 
 
-source "azure-arm" "api_server" {
+source "azure-arm" "training_server" {
   azure_tags = {
     type = "training_server"
     task = "Image deployment"
@@ -21,30 +33,24 @@ source "azure-arm" "api_server" {
 }
 
 build {
-  sources = ["source.azure-arm.api_server"]
+  sources = ["source.azure-arm.training_server"]
+  
+  provisioner "file" {
+    source = "supervisord.conf"
+    destination = "supervisord.conf"
+  }
 
   provisioner "shell" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    inline          = ["apt-get update", 
-                      "apt-get upgrade -y", 
-                      "apt-get install software-properties-common -y",
-                      "apt install python3.9 -y", 
-                      "python3 --version",
-                      "apt install python3-pip -y",
-                      "ln -s /usr/bin/python3 /usr/bin/python",
-                      "PATH='$HOME/.local/bin:$PATH'",
-                      "export PATH",
-                      "pip3 install tensorflow==2.13.* -y",
-                      "python3 -c 'import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))'",
-                      "apt install docker.io",
-                      "apt install docker-compose",
-                      "groupadd docker",
-                      "usermod -aG docker $USER",
-                      "newgrp docker",
-                      "docker run hello-world",
-                    ]
+    inline_shebang = "/bin/bash -e"
+    inline = ["sudo su",
+          "sleep 30", 
+          "sudo apt-get update -y", 
+           "sudo apt-get upgrade -y", 
+           "sudo apt install python3-pip -y", 
+           "echo done installing packages1",
+           "sudo pip3 install docker.io",
+           "sudo pip3 install flask",
+           "echo done installing packages"]
   }
 
 }
-
-

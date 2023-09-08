@@ -1,0 +1,9 @@
+ [Unit]
+ Description=Custom systemd service.
+
+ [Service]
+ Type=simple
+ ExecStart=/bin/bash /usr/bin/prefect_startup.sh
+
+ [Install]
+ WantedBy=multi-user.target
