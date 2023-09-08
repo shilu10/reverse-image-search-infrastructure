@@ -22,3 +22,9 @@ variable "hostname" {
 	default = "tf_training_server"
 }
 
+variable "vm_type" {
+	type = string
+	description = "type of vm to be used"
+	default = "Standard_B1s"
+}
+
