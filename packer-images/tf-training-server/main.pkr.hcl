@@ -1,3 +1,15 @@
+packer {
+  required_plugins {
+    azure = {
+      source  = "github.com/hashicorp/azure"
+      version = "~> 1"
+    }
+    ansible = {
+      source  = "github.com/hashicorp/ansible"
+      version = "~> 1"
+    }
+  }
+}
 
 
 source "azure-arm" "training_server" {
@@ -22,34 +34,28 @@ source "azure-arm" "training_server" {
 
 build {
   sources = ["source.azure-arm.training_server"]
+  
+  provisioner "file" {
+    source = "prefect_startup.sh"
+    destination = "prefect_startup.sh"
+  }
 
   provisioner "file" {
-    source = "supervisord.conf"
-    destination = "supervisord.conf"
+    source = "prefect_agent.service"
+    destination = "prefect_agent.service"
   }
 
   provisioner "shell" {
-    execute_command = "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
-    inline          = ["sudo su",
-                      "apt-get update", 
-                      "apt-get upgrade -y", 
-                      "apt-get install software-properties-common -y",
-                      "apt-add-repository universe",
-                      "apt install python3.9 -y", 
-                      "python3 --version",
-                      "apt install python3-pip -y",
-                      "ln -s /usr/bin/python3 /usr/bin/python",
-                      "PATH='$HOME/.local/bin:$PATH'",
-                      "export PATH",
-                      "pip3 install tensorflow==2.13.* -y",
-                      "python3 -c 'import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))'",
-                      "pip3 install -U prefect supervisor -y",
-                      "prefect cloud login -k pnu_oJal2aQeZ2d6GTkHpgTs47Sd7MxHXq0FNNn2",
-                      "supervisord -c ./supervisord.conf",
-                      "echo '@reboot root supervisord -c $HOME/supervisord.conf -l $HOME supervisord.log -u root' >> /etc/crontab",
-                    ]
+    inline_shebang = "/bin/bash -e"
+    inline = ["sudo su",
+           "sleep 30", 
+           "sudo apt-get update -y", 
+           "sudo apt-get upgrade -y", 
+           "sudo apt install python3-pip -y", 
+
+           "sudo pip3 install prefect", 
+           "echo done installing packages",
+           "sudo prefect cloud login --key 'pnu_oJal2aQeZ2d6GTkHpgTs47Sd7MxHXq0FNNn2' --workspace 'shilu4577gmailcom/demo'",]
   }
 
 }
-
-
