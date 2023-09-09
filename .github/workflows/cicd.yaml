@@ -42,6 +42,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
           ARM_CLIENT_ID: ${{ secrets.az_client_id }}
           ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           ls 
           cd infrastructure/tf-training-server/
@@ -56,6 +57,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
           ARM_CLIENT_ID: ${{ secrets.az_client_id }}
           ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           cd infrastructure/tf-training-server/
           terraform apply "terraform_plan" 
