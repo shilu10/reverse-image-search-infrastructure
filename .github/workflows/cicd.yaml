@@ -33,15 +33,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Configure Azure credentials
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+      
 
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Apply
+      - name: Terraform plan
         env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
@@ -51,4 +48,4 @@ jobs:
           ls 
           cd infrastructure/tf-training-server/
           terraform init 
-          terraform plan 
+          terraform plan -out=terraform_plan
