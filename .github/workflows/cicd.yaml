@@ -40,6 +40,8 @@ jobs:
 
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
+
+      - name: run terraform 
         run: |
           ls 
           cd infrastructure/tf-training-server/
