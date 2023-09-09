@@ -14,11 +14,15 @@
 ### creating the shared image gallery:
 	az sig create --resource-group myGalleryRG --gallery-name myGallery
 	az sig image-definition create \
-   --resource-group myGalleryRG \
-   --gallery-name myGallery \
-   --gallery-image-definition myImageDefinition \
-   --publisher myPublisher \
-   --offer myOffer \
-   --sku mySKU \
-   --os-type Linux \
-   --os-state specialized
+     --resource-group myGalleryRG \
+     --gallery-name myGallery \
+     --gallery-image-definition myImageDefinition \
+     --publisher myPublisher \
+     --offer myOffer \
+     --sku mySKU \
+     --os-type Linux \
+     --os-state specialized
+
+### creating ssh keys for both vm:
+  az sshkey create --name "mySSHKey" --resource-group "myResourceGroup"
+
