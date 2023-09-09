@@ -71,4 +71,4 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           cd infrastructure/tf-training-server/
-          terraform destroy "terraform_plan"
+          terraform apply "terraform_plan" --destroy
