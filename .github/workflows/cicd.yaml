@@ -33,8 +33,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      
-
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
@@ -49,3 +47,13 @@ jobs:
           cd infrastructure/tf-training-server/
           terraform init 
           terraform plan -out=terraform_plan
+
+      - name: Terraform apply
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform apply "terraform_plan" 
