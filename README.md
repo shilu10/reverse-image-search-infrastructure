@@ -24,5 +24,5 @@
      --os-state specialized
 
 ### creating ssh keys for both vm:
-  az sshkey create --name "mySSHKey" --resource-group "myResourceGroup"
+    az sshkey create --name "mySSHKey" --resource-group "myResourceGroup"
 
