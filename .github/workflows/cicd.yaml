@@ -24,6 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -35,24 +36,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           echo test1 
-
-    
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: hashicorp/setup-terraform@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a terraform init
-        run: |
+          ls 
           cd infrastructure/tf-training-server/
           terraform init 
-
-      # Runs a set of commands using the runners shell
-      - name: terraform plan
-        run: |
-          terraform plan 
-          echo test, and
-
-
-
-
+          terraform plan
