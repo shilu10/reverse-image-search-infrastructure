@@ -74,4 +74,8 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           cd infrastructure/tf-training-server/
+<<<<<<< HEAD
           terraform destroy --auto-approve
+=======
+          terraform apply "terraform_plan" --destroy
+>>>>>>> f9cd819b20df2265e6b11f44d17a41612eecb9a4
