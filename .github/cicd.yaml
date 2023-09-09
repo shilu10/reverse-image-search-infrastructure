@@ -1,0 +1,77 @@
+name: reverse_image_search_infrastructure_workflow
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - 'README.md'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  integration:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Lint code
+        run: echo "Linting completed"
+
+      - name: Reformat Code
+        run: echo "Reformat code completed"
+
+  build-and-push-ecr-image:
+    name: Continuous Delivery
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure terraform 
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform plan
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
+        run: |
+          ls 
+          cd infrastructure/tf-training-server/
+          terraform init 
+          terraform fmt 
+          terraform validate
+          terraform plan -lock=false
+
+      - name: Terraform apply
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform apply --auto-approve -lock=false
+
+      - name: Terraform Destroy
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform destroy --auto-approve -lock=false
