@@ -59,3 +59,13 @@ jobs:
         run: |
           cd infrastructure/tf-training-server/
           terraform apply "terraform_plan" 
+
+      - name: Terraform Destroy
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform destroy "terraform_plan"
