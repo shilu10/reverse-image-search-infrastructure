@@ -49,7 +49,6 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
         run: |
           ls 
+          cd infrastructure/tf-training-server/
           terraform init 
-          terraform plan
-          cd infrastrucuture/tf-training-server/
           terraform plan 
