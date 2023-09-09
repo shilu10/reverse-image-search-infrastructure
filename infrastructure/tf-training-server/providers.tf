@@ -19,7 +19,7 @@ terraform {
   backend "azurerm" {
       resource_group_name  = "tfstate"
       storage_account_name = "tfstate686"
-      container_name       = "tf_training_server_tfstate"
+      container_name       = "tf-training-server-tfstate"
       key                  = "terraform.tfstate"
   }
 }
