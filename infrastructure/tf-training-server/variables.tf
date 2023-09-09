@@ -17,17 +17,17 @@ variable "username" {
 }
 
 variable "hostname" {
-	type = string 
-	description = "The hostname for new VM."
-	default = "tf_training_server"
+  type        = string
+  description = "The hostname for new VM."
+  default     = "tf_training_server"
 }
 
 variable "vm_type" {
-	type = string
-	description = "type of vm to be used"
-	default = "Standard_B1s"
+  type        = string
+  description = "type of vm to be used"
+  default     = "Standard_B1s"
 }
 
-variabel "public_key" {
-  type = string 
+variable "public_key" {
+  type = string
 }
