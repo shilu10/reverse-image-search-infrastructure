@@ -115,7 +115,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
 
   admin_ssh_key {
     username   = var.username
-    public_key = file("tf_training_server.pub")
+    public_key = var.public_key
   }
 
   boot_diagnostics {

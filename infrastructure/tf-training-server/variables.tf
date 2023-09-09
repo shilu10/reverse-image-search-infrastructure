@@ -28,3 +28,6 @@ variable "vm_type" {
 	default = "Standard_B1s"
 }
 
+variabel "public_key" {
+  type = string 
+}
