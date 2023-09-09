@@ -48,7 +48,7 @@ build {
            "sudo apt-get upgrade -y", 
            "sudo apt install python3-pip -y", 
            "echo done installing packages1",
-           "sudo pip3 install docker.io",
+           "sudo apt install docker.io",
            "sudo pip3 install flask",
            "echo done installing packages"]
   }
