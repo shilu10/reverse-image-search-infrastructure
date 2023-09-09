@@ -15,6 +15,28 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+
+  # prepare the environment
+  prepare:
+
+    runs-on: ubuntu-latest
+
+    # use azure login plugin
+    # use terraform plugin
+    steps:
+    - name: 'autenticate to azure cloud'
+      - uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: 'run axure cli commands'
+      run: |
+          az account show 
+          az group list 
+          pwd
+
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -25,6 +47,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
+
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
