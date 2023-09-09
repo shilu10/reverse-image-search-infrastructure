@@ -41,9 +41,12 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: run terraform 
+      - name: Terraform Apply
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
         run: |
-          ls 
-          cd infrastructure/tf-training-server/
-          terraform init 
-          terraform plan
+          cd infrastrucuture/tf-training-server/
+          terraform plan 
