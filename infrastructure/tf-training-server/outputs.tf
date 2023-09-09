@@ -7,6 +7,6 @@ output "public_ip_address" {
 }
 
 output "private_key" {
-  value = jsondecode(azapi_resource_action.ssh_public_key_gen.output).privateKey
+  value     = jsondecode(azapi_resource_action.ssh_public_key_gen.output).privateKey
   sensitive = true
 }

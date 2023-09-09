@@ -46,6 +46,8 @@ jobs:
           ls 
           cd infrastructure/tf-training-server/
           terraform init 
+          terraform fmt 
+          terraform validate
           terraform plan -out=terraform_plan
 
       - name: Terraform apply
