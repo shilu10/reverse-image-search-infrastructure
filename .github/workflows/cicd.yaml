@@ -46,7 +46,7 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           ls 
-          cd infrastructure/tf-training-server/
+          cd infrastructure/api-server/
           terraform init 
           terraform fmt 
           terraform validate
@@ -61,7 +61,7 @@ jobs:
           ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
-          cd infrastructure/tf-training-server/
+          cd infrastructure/api-server/
           terraform apply --auto-approve
 
       - name: Terraform Destroy
@@ -73,6 +73,5 @@ jobs:
           ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
-          cd infrastructure/tf-training-server/
+          cd infrastructure/api-server/
           terraform destroy --auto-approve
-          terraform apply "terraform_plan" --destroy

@@ -1,8 +1,8 @@
 # reverse-image-search-infrastructure
 
 ### creating resource group and service principle using azure cli 
-    - az group create MyResourceGroupName -l centralindia 
-    - az ad sp create-for-rbac --role Contributor --scopes /subscriptions/<subscription_id> --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
+    $ az group create MyResourceGroupName -l centralindia 
+    $ az ad sp create-for-rbac --role Contributor --scopes /subscriptions/<subscription_id> --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
 
     output:
     {
@@ -12,8 +12,8 @@
     }
 
 ### creating the shared image gallery:
-	az sig create --resource-group myGalleryRG --gallery-name myGallery
-	az sig image-definition create \
+	$ az sig create --resource-group myGalleryRG --gallery-name myGallery
+	$ az sig image-definition create \
      --resource-group myGalleryRG \
      --gallery-name myGallery \
      --gallery-image-definition myImageDefinition \
@@ -24,12 +24,14 @@
      --os-state specialized
 
 ### creating ssh keys for both vm:
-    az sshkey create --name "mySSHKey" --resource-group "myResourceGroup"
+    $ az sshkey create --name "mySSHKey" --resource-group "myResourceGroup"
 
 ### for github action aazure login
-    az ad sp create-for-rbac --name "reverse_image_search" --role contributor \
+    $az ad sp create-for-rbac --name "reverse_image_search" --role contributor \
 >                                 --scopes /subscriptions/c9e7cee3-35fd-4fa3-a5b7-ab7e199b7480/resourceGroups/reverse_image_search \
 >                                 --json-auth
+
+ output:
     {
     "clientId": "a06e4614-2223-48c7-bea7-2778ae31d174",
     "clientSecret": "0bC8Q~nzZShY_-xwbXC-_Mci~HcjQfQnUWAgCbES",
@@ -42,5 +44,23 @@
     "galleryEndpointUrl": "https://gallery.azure.com/",
     "managementEndpointUrl": "https://management.core.windows.net/"
   }
+
+### creating tfstate azure backend container's 
+
+    $ bash tfstate_bucket.sh -r rg_name -s sg_name -c c_name -l location_name
+    
+    arguments:
+    -r = resource_group_name 
+    -s = storage_account_name 
+    -c = container_name 
+    -l = location eg: centralindia
+
+ - In this project, we need two containers, bcoz of two virtual machine will be created named tf_training_server and api_server, So create two container as shown in below example,
+    
+        $ bash tfstate_bucket.sh -r rg_1 -s sg_1 -c c_1 -l westus
+        $ bash tfstate_bucket.sh -r rg_2 -s sg_2 -c c_2 -l westus
+
+
+
 
 
