@@ -4,12 +4,6 @@ variable "resource_group_location" {
   description = "Location of the resource group."
 }
 
-variable "resource_group_name_prefix" {
-  type        = string
-  default     = "rg"
-  description = "Prefix of the resource group name that's combined with a random ID so name is unique in your Azure subscription."
-}
-
 variable "username" {
   type        = string
   description = "The username for the local account that will be created on the new VM."
@@ -28,3 +22,11 @@ variable "vm_type" {
 	default = "Standard_B1s"
 }
 
+variable "public_key" {
+  type = string
+}
+
+variable "network_nic_name"{
+  type = string
+  default = "api_server"
+}
