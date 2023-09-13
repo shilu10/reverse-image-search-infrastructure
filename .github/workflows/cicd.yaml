@@ -25,20 +25,23 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Packer Source Code Analysis 
-        run: cd packer-images/tf-training-server
-        run: packer fmt .
-        run: packer validate .
-        run: cd ../api-server
-        run: packer fmt .
-        run: packer validate .
+        run: |
+          cd packer-images/tf-training-server
+          packer fmt .
+          packer validate .
+          cd ../api-server
+          packer fmt .
+          packer validate .
 
       - name: Tf-Training-Server image building 
-        run: cd packer-images/tf-training-server
-        run: packer build .
+        run: |
+          cd packer-images/tf-training-server
+          packer build .
 
       - name: Api-Sever image building
-        run: cd packer-images/api-server
-        run: packer build . 
+        run: |
+          cd packer-images/api-server
+          packer build . 
 
       - name: Terraform plan
         env:
