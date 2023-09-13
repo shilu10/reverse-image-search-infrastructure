@@ -24,7 +24,7 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Packer Source Code Analysis 
+      - name: Packer Code Validation 
         run: |
           cd packer-images/tf-training-server
           packer init .
@@ -38,14 +38,14 @@ jobs:
       - name: Tf-Training-Server image building 
         run: |
           cd packer-images/tf-training-server
-          packer build .
+          packer build -force .
 
       - name: Api-Sever image building
         run: |
           cd packer-images/api-server
-          packer build . 
+          packer build -force . 
 
-      - name: Terraform plan
+      - name: Terraform Code Validation
         env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
@@ -56,13 +56,10 @@ jobs:
         run: |
           ls 
           cd infrastructure/api-server/
-          terraform init 
           terraform fmt 
           terraform validate
-          terraform plan 
 
           cd ../tf-training-server
-          terraform init 
           terraform fmt 
           terraform validate 
 
@@ -93,6 +90,7 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           cd infrastructure/api-server/
+          terraform init 
           terraform apply --auto-approve
 
       - name: Terraform Destroy
