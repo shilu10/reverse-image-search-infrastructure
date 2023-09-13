@@ -27,9 +27,11 @@ jobs:
       - name: Packer Source Code Analysis 
         run: |
           cd packer-images/tf-training-server
+          packer init .
           packer fmt .
           packer validate .
           cd ../api-server
+          packer init .
           packer fmt .
           packer validate .
 
