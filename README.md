@@ -60,7 +60,16 @@
         $ bash tfstate_bucket.sh -r rg_1 -s sg_1 -c c_1 -l westus
         $ bash tfstate_bucket.sh -r rg_2 -s sg_2 -c c_2 -l westus
 
+### Login to the Virtual Machine created. (login to tf-training-server)
+    ssh -i identity_file username@public_ip 
 
+### Starting the prefect agent as a daemon(using systemctl)
+- required files for creating daemon, are uploaded in continuous integration pipeline. Now just execute the below command, 
+
+        $ sudo systemctl start prefect_agent 
+        $ sudo systemctl enable prefect_agent 
+
+    Above command, will start prefect_agent service, and also it will enable the prefect_agent_service, which will be started at every reboot/restart of vm.
 
 
 
