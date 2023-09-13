@@ -9,10 +9,6 @@ variable "storage_account_name" {
   default     = "risforbuckets"
 }
 
-variable "account_tier" {
-  type = string
-}
-
 variable "replication_type" {
   type = string
 }
