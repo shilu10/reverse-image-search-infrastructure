@@ -24,3 +24,4 @@ variable "container_name" {
 variable "container_access_type" {
   type = string
 }
+
