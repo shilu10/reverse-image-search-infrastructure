@@ -95,6 +95,6 @@ jobs:
         run: |
           cd infrastructure/buckets
           terraform init 
-          terraform plan 
+          terraform apply -var-file="terraform.tfvars" --auto-approve 
 
 
