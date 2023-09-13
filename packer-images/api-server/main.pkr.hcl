@@ -34,23 +34,16 @@ source "azure-arm" "training_server" {
 
 build {
   sources = ["source.azure-arm.training_server"]
-  
-  provisioner "file" {
-    source = "supervisord.conf"
-    destination = "supervisord.conf"
-  }
 
   provisioner "shell" {
     inline_shebang = "/bin/bash -e"
     inline = ["sudo su",
-          "sleep 30", 
-          "sudo apt-get update -y", 
-           "sudo apt-get upgrade -y", 
-           "sudo apt install python3-pip -y", 
-           "echo done installing packages1",
-           "sudo apt install docker.io",
-           "sudo pip3 install flask",
-           "echo done installing packages"]
+      "sleep 30",
+      "sudo apt-get update -y",
+      "sudo apt-get upgrade -y",
+      "sudo apt install python3-pip -y",
+      "sudo pip3 install tensorflow --no-cache-dir",
+      "sudo apt install docker.io -y",
+    ]
   }
-
 }

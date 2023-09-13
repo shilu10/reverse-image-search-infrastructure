@@ -16,14 +16,14 @@ resource "azurerm_storage_account" "terraform_sa" {
 }
 
 resource "azurerm_storage_container" "terraform_container_training_data" {
-  name                  = "reverse_image_search_training_data_container"
-  storage_account_name  = azurerm_storage_account.example.name
+  name                  = "reverse-image-search-training-data-container"
+  storage_account_name  = azurerm_storage_account.terraform_sa.name
   container_access_type = var.container_access_type
 }
 
 resource "azurerm_storage_container" "terraform_container_extractec_features" {
-  name                  = "reverse_image_search_extracted_feature_container"
-  storage_account_name  = azurerm_storage_account.example.name
+  name                  = "reverse-image-search-extracted-feature-container"
+  storage_account_name  = azurerm_storage_account.terraform_sa.name
   container_access_type = var.container_access_type
 }
 

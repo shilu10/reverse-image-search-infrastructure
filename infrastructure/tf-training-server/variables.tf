@@ -13,7 +13,7 @@ variable "username" {
 variable "hostname" {
   type        = string
   description = "The hostname for new VM."
-  default     = "tf_training_server"
+  default     = "trainingserver"
 }
 
 variable "vm_type" {
@@ -29,4 +29,49 @@ variable "public_key" {
 variable "network_nic_name"{
   type = string
   default = "tf_training_server"
+}
+
+variable "prefix" {
+  type = string 
+  default = "tf-training-server"
+}
+
+variable "virtual_network_name"{
+  type = string 
+  default = "ris_tf_training"
+}
+
+variable "address_space" {
+  type = list 
+  default = ["10.0.0.0/16"]
+}
+
+variable "subnet_name" {
+  type = string 
+  default = "ris_tf_training"
+}
+
+variable "address_prefixes" {
+  type = list 
+  default = ["10.0.1.0/24"] 
+}
+
+variable "public_ip_name" {
+  type = string 
+  default = "rmi_tf_training"
+}
+
+variable "public_ip_allocation_method" {
+  type = string 
+  default = "Dynamic"
+}
+
+variable "nsg_name" {
+  type = string 
+  default = "ris_tf_training"
+}
+
+variable "vm_name" {
+  type = string 
+  default = "tftrainingserver"
 }

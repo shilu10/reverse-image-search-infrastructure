@@ -1,34 +1,39 @@
+data "azurerm_image" "search" {
+  name                = "reverse_image_search_tf_training_server_v3"
+  resource_group_name = "reverse_image_search"
+}
+
 data "azurerm_resource_group" "rg" {
   name = "reverse_image_search"
 }
 
 # Create virtual network
 resource "azurerm_virtual_network" "my_terraform_network" {
-  name                = "myVnet"
-  address_space       = ["10.0.0.0/16"]
+  name                = var.virtual_network_name
+  address_space       = var.address_space
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
 # Create subnet
 resource "azurerm_subnet" "my_terraform_subnet" {
-  name                 = "mySubnet"
+  name                 = var.subnet_name
   resource_group_name  = data.azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.my_terraform_network.name
-  address_prefixes     = ["10.0.1.0/24"]
+  address_prefixes     = var.address_prefixes
 }
 
 # Create public IPs
 resource "azurerm_public_ip" "my_terraform_public_ip" {
-  name                = "myPublicIP"
+  name                = var.public_ip_name
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"
+  allocation_method   = var.public_ip_allocation_method
 }
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "my_terraform_nsg" {
-  name                = "myNetworkSecurityGroup"
+  name                = var.nsg_name
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
 
@@ -86,11 +91,11 @@ resource "azurerm_storage_account" "my_storage_account" {
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
-  name                  = "myVM"
+  name                  = var.vm_name
   location              = data.azurerm_resource_group.rg.location
   resource_group_name   = data.azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.my_terraform_nic.id]
-  size                  = "Standard_DS1_v2"
+  size                  = var.vm_type 
 
   os_disk {
     name                 = "myOsDisk"
@@ -98,14 +103,8 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
     storage_account_type = "Premium_LRS"
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
-    version   = "latest"
-  }
+  source_image_id = data.azurerm_image.search.id
 
-  computer_name  = "hostname"
   admin_username = var.username
 
   admin_ssh_key {

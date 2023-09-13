@@ -34,28 +34,30 @@ source "azure-arm" "training_server" {
 
 build {
   sources = ["source.azure-arm.training_server"]
-  
+
   provisioner "file" {
-    source = "prefect_startup.sh"
+    source      = "./server_files/prefect_startup.sh"
     destination = "prefect_startup.sh"
   }
 
   provisioner "file" {
-    source = "prefect_agent.service"
+    source      = "./server_files/prefect_agent.service"
     destination = "prefect_agent.service"
   }
 
   provisioner "shell" {
     inline_shebang = "/bin/bash -e"
     inline = ["sudo su",
-           "sleep 30", 
-           "sudo apt-get update -y", 
-           "sudo apt-get upgrade -y", 
-           "sudo apt install python3-pip -y", 
-
-           "sudo pip3 install prefect", 
-           "echo done installing packages",
-           "sudo prefect cloud login --key 'pnu_oJal2aQeZ2d6GTkHpgTs47Sd7MxHXq0FNNn2' --workspace 'shilu4577gmailcom/demo'",]
+      "sleep 30",
+      "sudo apt-get update -y",
+      "sudo apt-get upgrade -y",
+      "sudo apt install python3-pip -y",
+      "sudo pip3 install tensorflow --no-cache-dir",
+      "sudo pip3 install prefect supervisor",
+      "sudo mv prefect_startup.sh /usr/bin/prefect_startup.sh", 
+      "sudo chmod +x /usr/bin/prefect_startup.sh",
+      "sudo mv prefect_agent.service /etc/systemd/system/prefect_agent.service",
+      "sudo chmod 644 /etc/systemd/system/prefect_agent.service"
+    ]
   }
-
 }
