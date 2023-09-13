@@ -17,10 +17,10 @@ terraform {
   }
 
   backend "azurerm" {
-      resource_group_name  = "tfstate"
-      storage_account_name = "tfstate6apiapi86"
-      container_name       = "buckets-tfstate"
-      key                  = "terraform.tfstate"
+    resource_group_name  = "tfstate"
+    storage_account_name = "tfstate686"
+    container_name       = "buckets-tfstate"
+    key                  = "terraform.tfstate"
   }
 }
 
