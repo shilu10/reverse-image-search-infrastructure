@@ -21,7 +21,7 @@ variable "container_access_type" {
   type = string
 }
 
-variable 'account_tier' {
+variable "account_tier" {
 	type = string 
 	default = "Standard"
 }
