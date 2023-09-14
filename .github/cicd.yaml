@@ -58,11 +58,13 @@ jobs:
           ls 
           curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
           cd infrastructure/api-server/
+          terraform init 
           terraform fmt 
           terraform validate
           tfsec .
 
           cd ../tf-training-server
+          terrform init
           terraform fmt 
           terraform validate 
           tfsec .
