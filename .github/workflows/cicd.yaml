@@ -24,7 +24,7 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Packer Code Validation 
+      - name: Run Packer Code Validation 
         run: |
           cd packer-images/tf-training-server
           packer init .
@@ -36,7 +36,7 @@ jobs:
           packer fmt .
           packer validate .
 
-      - name: Tf-Training-Server image building 
+      - name: Run Tf-Training-Server image building 
         run: |
           cd packer-images/tf-training-server
           packer build -force .
@@ -46,7 +46,7 @@ jobs:
           cd packer-images/api-server
           packer build -force . 
 
-      - name: Terraform Code Validation
+      - name: Run Terraform Code Validation
         env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
@@ -67,11 +67,12 @@ jobs:
           terraform fmt 
           terraform validate 
 
-      - name: Lint code
-        run: echo "Linting completed"
-
-      - name: Reformat Code
-        run: echo "Reformat code completed"
+      - name: Run TerraScan
+        uses: tenable/terrascan-action@main
+        with:
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'azure'
 
   build-and-push-ecr-image:
     name: Continuous Delivery
@@ -91,18 +92,18 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform apply
+      - name: Run api-server Creation
         run: |
           cd infrastructure/api-server/
           terraform init 
           terraform apply --auto-approve
 
-      - name: Terraform Destroy
+      - name: Run Terraform Destroy
         run: |
           cd infrastructure/api-server/
           terraform destroy --auto-approve
 
-      - name: Terraform apply
+      - name: Run tf-training-server Creation
         run: |
           cd infrastructure/tf-training-server/
           terraform init 
@@ -113,7 +114,7 @@ jobs:
           cd infrastructure/tf-training-server/
           terraform destroy --auto-approve
 
-      - name: Bucket Creation
+      - name: Run Bucket Creation
         run: |
           cd infrastructure/buckets
           terraform init 
