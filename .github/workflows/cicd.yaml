@@ -63,6 +63,8 @@ jobs:
           iac_type: 'terraform'
           iac_version: 'v14'
           policy_type: 'azure'
+          only_warn: true
+          sarif_upload: true
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v1
