@@ -82,13 +82,13 @@ jobs:
 
       - name: Terraform apply
         run: |
-          cd infrastructure/api-server/
+          cd infrastructure/tf-training-server/
           terraform init 
           terraform apply --auto-approve
 
       - name: Terraform Destroy
         run: |
-          cd infrastructure/api-server/
+          cd infrastructure/tf-training-server/
           terraform destroy --auto-approve
 
       - name: Bucket Creation
