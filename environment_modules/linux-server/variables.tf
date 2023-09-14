@@ -69,3 +69,7 @@ variable "custom_image_name"{
 variable "resource_group_name" {
   type = string
 }
+
+variable "os_disk_name" {
+  type = string
+}

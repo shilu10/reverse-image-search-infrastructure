@@ -78,10 +78,15 @@ variable "vm_name" {
 
 variable "custom_image_name" {
   type = string
-  default = "Reverse_image_search_api_server"
+  default = "reverse_image_search_api_server_v1"
 }
 
 variable "resource_group_name" {
   type = string
   default = "reverse_image_search"
+}
+
+variable "os_disk_name" {
+  type = string
+  default = "tfserverosdisk"
 }
