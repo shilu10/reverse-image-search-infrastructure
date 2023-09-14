@@ -14,8 +14,8 @@ permissions:
   contents: read
 
 jobs:
-  integration:
-    name: Continuous Integration
+  packer_code_validation:
+    name: Packer Code Validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -36,16 +36,30 @@ jobs:
           packer fmt .
           packer validate .
 
-      - name: Run Tf-Training-Server image building 
+  tf_training_server_image_build:
+    name: Tf-Training-Server Image Build
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Image building 
         run: |
           cd packer-images/tf-training-server
           packer build -force .
 
+  api_server_image_build:
+    name: Api-Server Image Build 
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
       - name: Api-Sever image building
         run: |
           cd packer-images/api-server
           packer build -force . 
 
+  terraform_code_validation:
+    name: Terraform Code Validation 
+    runs-on: ubuntu-latest
+    steps:
       - name: Run Terraform Code Validation
         env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
@@ -67,6 +81,9 @@ jobs:
           terraform fmt 
           terraform validate 
 
+  terrascan:
+    name: Run TerraScan 
+    steps:
       - name: Run TerraScan
         uses: tenable/terrascan-action@main
         with:
@@ -83,7 +100,7 @@ jobs:
 
   deploy:
     name: Continuous Delivery
-    needs: integration
+    needs: [tf_training_server_image_build, api_server_image_build, terraform_code_validation, terrascan]
     runs-on: ubuntu-latest
     env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
