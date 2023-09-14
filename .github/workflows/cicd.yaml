@@ -44,6 +44,7 @@ jobs:
       - name: Image building 
         run: |
           cd packer-images/tf-training-server
+          packer init .
           packer build -force .
 
   api_server_image_build:
@@ -57,6 +58,7 @@ jobs:
       - name: Api-Sever image building
         run: |
           cd packer-images/api-server
+          packer init .
           packer build -force . 
 
   terraform_code_validation:
@@ -95,7 +97,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        
+
       - name: Run TerraScan
         uses: tenable/terrascan-action@main
         with:
