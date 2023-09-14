@@ -88,5 +88,5 @@ variable "resource_group_name" {
 
 variable "os_disk_name" {
   type = string
-  default = "tfserverosdisk"
+  default = "apiserverosdisk"
 }
