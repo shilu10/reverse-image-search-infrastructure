@@ -54,10 +54,7 @@ build {
       "sudo apt install python3-pip -y",
       "sudo pip3 install tensorflow --no-cache-dir",
       "sudo pip3 install prefect supervisor",
-      "sudo mv prefect_startup.sh /usr/bin/prefect_startup.sh", 
-      "sudo chmod +x /usr/bin/prefect_startup.sh",
-      "sudo mv prefect_agent.service /etc/systemd/system/prefect_agent.service",
-      "sudo chmod 644 /etc/systemd/system/prefect_agent.service"
+      
     ]
   }
 }
