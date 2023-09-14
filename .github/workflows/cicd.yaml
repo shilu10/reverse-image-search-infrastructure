@@ -1,9 +1,9 @@
 name: reverse_image_search_infrastructure_workflow
 
 on:
-  push:
+  pull_request:
     branches:
-      - master
+    - master
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
