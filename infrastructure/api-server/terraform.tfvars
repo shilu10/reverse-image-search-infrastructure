@@ -1,4 +1,16 @@
 username = "azureuser"
 hostname = "apiserver"
 vm_type = "Standard_B1s"
-network_nic_name = "api_server_nic"
+network_nic_name = "api_server"
+prefix = "api-server"
+virtual_network_name = "ris_api_server"
+address_space = ["10.1.0.0/16"]
+subnet_name = "ris_tf_training"
+address_prefixes = ["10.0.1.0/24"] 
+public_ip_name = "ris_api_server"
+public_ip_allocation_method = "Dynamic"
+nsg_name = "ris_api_server"
+vm_name = "risapiserver"
+resource_group_location = "centralindia"
+custom_image_name = "reverse_image_search_api_server_v1"
+resource_group_name = "reverse_image_search"
