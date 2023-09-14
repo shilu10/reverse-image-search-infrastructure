@@ -41,7 +41,7 @@ jobs:
           terraform validate
 
           cd ../tf-training-server
-          terrform init
+          terraform init
           terraform fmt 
           terraform validate 
 
