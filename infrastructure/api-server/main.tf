@@ -19,4 +19,5 @@ module "api_server" {
   public_key = var.public_key
   resource_group_name = var.resource_group_name
   custom_image_name = var.custom_image_name
+  os_disk_name = var.os_disk_name
 }

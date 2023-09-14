@@ -1,10 +1,10 @@
 data "azurerm_image" "search" {
   name                = var.custom_image_name
-  resource_group_name = "reverse_image_search"
+  resource_group_name = var.resource_group_name
 }
 
 data "azurerm_resource_group" "rg" {
-  name = "reverse_image_search"
+  name = var.resource_group_name
 }
 
 # Create virtual network
@@ -98,7 +98,7 @@ resource "azurerm_linux_virtual_machine" "my_terraform_vm" {
   size                  = var.vm_type 
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = var.os_disk_name
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
