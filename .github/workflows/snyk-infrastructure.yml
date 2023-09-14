@@ -49,6 +49,8 @@ jobs:
             environment_modules/linux-server/variables.tf
             environment_modules/linux-server/outputs.tf
 
+          sarif_file: tfsec.sarif
+
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
