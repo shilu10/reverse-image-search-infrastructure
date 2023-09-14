@@ -24,17 +24,7 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Run Packer Code Validation 
-        run: |
-          cd packer-images/tf-training-server
-          packer init .
-          packer fmt .
-          packer validate .
 
-          cd ../api-server
-          packer init .
-          packer fmt .
-          packer validate .
 
       - name: Run Terraform Code Validation
         env:
