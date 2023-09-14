@@ -83,3 +83,8 @@ variable "resource_group_name" {
   type = string
   default = "reverse_image_search"
 }
+
+variable "os_disk_name" {
+  type = string
+  default = "tftrainingserverosdisk"
+}
