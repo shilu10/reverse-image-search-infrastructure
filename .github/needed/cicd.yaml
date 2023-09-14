@@ -83,6 +83,7 @@ jobs:
 
   terrascan:
     name: Run TerraScan 
+    runs-on: ubuntu-latest
     steps:
       - name: Run TerraScan
         uses: tenable/terrascan-action@main
