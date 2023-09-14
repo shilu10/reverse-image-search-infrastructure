@@ -21,6 +21,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Configure terraform 
+        uses: hashicorp/setup-terraform@v2
+
       - name: Run Packer Code Validation 
         run: |
           cd packer-images/tf-training-server
@@ -38,13 +41,9 @@ jobs:
     needs: packer_code_validation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       - name: Image building 
         run: |
           cd packer-images/tf-training-server
-          packer init .
           packer build -force .
 
   api_server_image_build:
@@ -52,25 +51,15 @@ jobs:
     needs: packer_code_validation
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       - name: Api-Sever image building
         run: |
           cd packer-images/api-server
-          packer init .
           packer build -force . 
 
   terraform_code_validation:
     name: Terraform Code Validation 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Configure terraform 
-        uses: hashicorp/setup-terraform@v2
-
       - name: Run Terraform Code Validation
         env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
@@ -81,6 +70,7 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           ls 
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
           cd infrastructure/api-server/
           terraform init 
           terraform fmt 
@@ -95,9 +85,6 @@ jobs:
     name: Run TerraScan 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
       - name: Run TerraScan
         uses: tenable/terrascan-action@main
         with:
