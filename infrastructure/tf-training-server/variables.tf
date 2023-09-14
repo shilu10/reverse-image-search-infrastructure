@@ -75,3 +75,11 @@ variable "vm_name" {
   type = string 
   default = "tftrainingserver"
 }
+
+variable "custom_image_name"{
+  type = string
+}
+variable "resource_group_name" {
+  type = string
+  default = "reverse_image_search"
+}
