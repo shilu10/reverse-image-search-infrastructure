@@ -1,6 +1,6 @@
 # from server module in environment_module directory.
 
-module "tf_training_server" {
+module "api_server" {
   source = "../../environment_modules/linux-server/"
   username = var.username
   hostname = var.hostname
