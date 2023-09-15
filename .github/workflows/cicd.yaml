@@ -33,34 +33,6 @@ jobs:
           packer fmt .
           packer validate .
 
-  tf_training_server_image_build:
-    name: Tf-Training-Server Image Build
-    needs: packer_code_validation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Image building 
-        run: |
-          cd packer-images/tf-training-server
-          packer init .
-          packer build -force .
-
-  api_server_image_build:
-    name: Api-Server Image Build 
-    needs: packer_code_validation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Api-Sever image building
-        run: |
-          cd packer-images/api-server
-          packer init .
-          packer build -force . 
-
   terraform_code_validation:
     name: Terraform Code Validation 
     runs-on: ubuntu-latest
@@ -114,7 +86,7 @@ jobs:
 
   deploy:
     name: Continuous Delivery
-    needs: [tf_training_server_image_build, api_server_image_build, terraform_code_validation, terrascan]
+    needs: [terraform_code_validation, terrascan]
     runs-on: ubuntu-latest
     env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
@@ -130,16 +102,6 @@ jobs:
       - name: Configure terraform 
         uses: hashicorp/setup-terraform@v2
 
-      - name: Run api-server Creation
-        run: |
-          cd infrastructure/api-server/
-          terraform init 
-          terraform apply --auto-approve
-
-      - name: Run Terraform Destroy
-        run: |
-          cd infrastructure/api-server/
-          terraform destroy --auto-approve
 
       - name: Run tf-training-server Creation
         run: |
