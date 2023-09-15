@@ -1,5 +1,8 @@
 # reverse-image-search-infrastructure
 
+
+### api-server-v4 and mycutomimage_v2 working
+
 ### creating resource group and service principle using azure cli 
     $ az group create MyResourceGroupName -l centralindia 
     $ az ad sp create-for-rbac --role Contributor --scopes /subscriptions/<subscription_id> --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
