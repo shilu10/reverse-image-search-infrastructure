@@ -1,7 +1,7 @@
 name: reverse_image_search_infrastructure_workflow
 
 on:
-  pull_request:
+  push:
     branches:
     - master
     paths-ignore:
