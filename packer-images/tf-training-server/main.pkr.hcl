@@ -35,15 +35,6 @@ source "azure-arm" "training_server" {
 build {
   sources = ["source.azure-arm.training_server"]
 
-  provisioner "file" {
-    source      = "./server_files/prefect_startup.sh"
-    destination = "prefect_startup.sh"
-  }
-
-  provisioner "file" {
-    source      = "./server_files/prefect_agent.service"
-    destination = "prefect_agent.service"
-  }
 
   provisioner "shell" {
     inline_shebang = "/bin/bash -e"
@@ -53,8 +44,7 @@ build {
       "sudo apt-get upgrade -y",
       "sudo apt install python3-pip -y",
       "sudo pip3 install tensorflow --no-cache-dir",
-      "sudo pip3 install prefect supervisor",
-      
+      "sudo pip3 install prefect",
     ]
   }
 }
