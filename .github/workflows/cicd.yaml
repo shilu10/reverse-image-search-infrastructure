@@ -33,6 +33,33 @@ jobs:
           packer fmt .
           packer validate .
 
+  tf_training_server_image_build:
+    name: Tf-Training-Server Image Build
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Image building 
+        run: |
+          cd packer-images/tf-training-server
+          packer init .
+          packer build -force .
+
+  api_server_image_build:
+    name: Api-Server Image Build 
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Api-Sever image building
+        run: |
+          cd packer-images/api-server
+          packer init .
+          packer build -force . 
 
   terraform_code_validation:
     name: Terraform Code Validation 
@@ -87,7 +114,7 @@ jobs:
 
   deploy:
     name: Continuous Delivery
-    needs: [packer_code_validation, terraform_code_validation, terrascan]
+    needs: [tf_training_server_image_build, api_server_image_build, terraform_code_validation, terrascan]
     runs-on: ubuntu-latest
     env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
