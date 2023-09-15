@@ -80,7 +80,7 @@ jobs:
 
   deploy:
     name: Continuous Delivery
-    needs: [tf_training_server_image_build, api_server_image_build, terraform_code_validation, terrascan]
+    needs: [terraform_code_validation, terrascan]
     runs-on: ubuntu-latest
     env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
