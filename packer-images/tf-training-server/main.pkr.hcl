@@ -54,6 +54,6 @@ build {
       "sudo apt install python3-pip -y",
       "sudo pip3 install tensorflow --no-cache-dir",
       "sudo pip3 install prefect supervisor",
-      
+    ]
   }
 }
