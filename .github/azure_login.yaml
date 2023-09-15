@@ -1,12 +1,131 @@
-on: [push]
+name: reverse_image_search_infrastructure_workflow
 
-name: AzureLoginSample
+on:
+  pull_request:
+    branches:
+    - master
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - 'ASSIGNMENT.md'
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  build-and-deploy:
+  packer_code_validation:
+    name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
-      - name: Log in with Azure
-        uses: azure/login@v1
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure terraform 
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Run Packer Code Validation 
+        run: |
+          cd packer-images/tf-training-server
+          packer init .
+          packer fmt .
+          packer validate .
+
+          cd ../api-server
+          packer init .
+          packer fmt .
+          packer validate .
+
+      - name: Run Tf-Training-Server image building 
+        run: |
+          cd packer-images/tf-training-server
+          packer build -force .
+
+      - name: Api-Sever image building
+        run: |
+          cd packer-images/api-server
+          packer build -force . 
+
+      - name: Run Terraform Code Validation
+        env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
+        run: |
+          ls 
+          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+          cd infrastructure/api-server/
+          terraform init 
+          terraform fmt 
+          terraform validate
+
+          cd ../tf-training-server
+          terraform init
+          terraform fmt 
+          terraform validate 
+
+      - name: Run TerraScan
+        uses: tenable/terrascan-action@main
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          iac_type: 'terraform'
+          iac_version: 'v14'
+          policy_type: 'azure'
+          only_warn: true
+          sarif_upload: true
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: terrascan.sarif
+
+  deploy:
+    name: Continuous Delivery
+    needs: integration
+    runs-on: ubuntu-latest
+    env:
+          ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.az_subscription_id }}
+          ARM_CLIENT_ID: ${{ secrets.az_client_id }}
+          ARM_CLIENT_SECRET: ${{ secrets.az_client_secret }}
+          ARM_ACCESS_KEY: ${{ secrets.az_account_key }}
+          TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure terraform 
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Run api-server Creation
+        run: |
+          cd infrastructure/api-server/
+          terraform init 
+          terraform apply --auto-approve
+
+      - name: Run Terraform Destroy
+        run: |
+          cd infrastructure/api-server/
+          terraform destroy --auto-approve
+
+      - name: Run tf-training-server Creation
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform init 
+          terraform apply --auto-approve
+
+      - name: Terraform Destroy
+        run: |
+          cd infrastructure/tf-training-server/
+          terraform destroy --auto-approve
+
+      - name: Run Bucket Creation
+        run: |
+          cd infrastructure/buckets
+          terraform init 
+          terraform apply --auto-approve
+          terraform destroy --auto-approve
+
+
