@@ -14,15 +14,12 @@ permissions:
   contents: read
 
 jobs:
-  integration:
-    name: Continuous Integration
+  packer_code_validation:
+    name: Packer Code Validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
-      - name: Configure terraform 
-        uses: hashicorp/setup-terraform@v2
 
       - name: Run Packer Code Validation 
         run: |
@@ -36,15 +33,43 @@ jobs:
           packer fmt .
           packer validate .
 
-      - name: Run Tf-Training-Server image building 
+  tf_training_server_image_build:
+    name: Tf-Training-Server Image Build
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Image building 
         run: |
           cd packer-images/tf-training-server
+          packer init .
           packer build -force .
+
+  api_server_image_build:
+    name: Api-Server Image Build 
+    needs: packer_code_validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Api-Sever image building
         run: |
           cd packer-images/api-server
+          packer init .
           packer build -force . 
+
+  terraform_code_validation:
+    name: Terraform Code Validation 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure terraform 
+        uses: hashicorp/setup-terraform@v2
 
       - name: Run Terraform Code Validation
         env:
@@ -56,7 +81,6 @@ jobs:
           TF_VAR_public_key: ${{ secrets.tf_var_public_key }}
         run: |
           ls 
-          curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
           cd infrastructure/api-server/
           terraform init 
           terraform fmt 
@@ -66,6 +90,13 @@ jobs:
           terraform init
           terraform fmt 
           terraform validate 
+
+  terrascan:
+    name: Run TerraScan 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Run TerraScan
         uses: tenable/terrascan-action@main
@@ -83,7 +114,7 @@ jobs:
 
   deploy:
     name: Continuous Delivery
-    needs: integration
+    needs: [tf_training_server_image_build, api_server_image_build, terraform_code_validation, terrascan]
     runs-on: ubuntu-latest
     env:
           ARM_TENANT_ID: ${{ secrets.az_tenant_id }}
