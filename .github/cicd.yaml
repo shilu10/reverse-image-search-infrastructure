@@ -136,10 +136,6 @@ jobs:
           terraform init 
           terraform apply --auto-approve
 
-      - name: Run Terraform Destroy
-        run: |
-          cd infrastructure/api-server/
-          terraform destroy --auto-approve
 
       - name: Run tf-training-server Creation
         run: |
@@ -147,16 +143,11 @@ jobs:
           terraform init 
           terraform apply --auto-approve
 
-      - name: Terraform Destroy
-        run: |
-          cd infrastructure/tf-training-server/
-          terraform destroy --auto-approve
 
       - name: Run Bucket Creation
         run: |
           cd infrastructure/buckets
           terraform init 
           terraform apply --auto-approve
-          terraform destroy --auto-approve
 
 
