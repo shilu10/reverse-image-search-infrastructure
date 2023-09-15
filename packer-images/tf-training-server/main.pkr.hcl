@@ -32,8 +32,19 @@ source "azure-arm" "training_server" {
   vm_size                           = var.vm_size
 }
 
+
 build {
   sources = ["source.azure-arm.training_server"]
+
+  provisioner "file" {
+    source      = "./server_files/prefect_startup.sh"
+    destination = "prefect_startup.sh"
+  }
+
+  provisioner "file" {
+    source      = "./server_files/prefect_agent.service"
+    destination = "prefect_agent.service"
+  }
 
 
   provisioner "shell" {
