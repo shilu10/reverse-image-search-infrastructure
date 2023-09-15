@@ -55,7 +55,7 @@ build {
       "sudo apt-get upgrade -y",
       "sudo apt install python3-pip -y",
       "sudo pip3 install tensorflow --no-cache-dir",
-      "sudo pip3 install prefect",
+      "sudo pip3 install -U prefect",
     ]
   }
 }
